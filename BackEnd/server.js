@@ -46,7 +46,9 @@ app.delete("/api/ToDo/DeleteTask/:id", async (req, res) => {
       res.sendStatus(500); // Sending an error status code
     });
 });
-
+app.get("/",(req,res)=>{
+  res.send("HE:L")
+})
 app.put("/api/ToDo/MoveTaskUp/:id", async (req, res) => {
   const taskId = req.params.id;
 

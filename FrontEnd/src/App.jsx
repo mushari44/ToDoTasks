@@ -4,7 +4,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState("");
   function handleInput(event) {
-    setInput(event.target.value);
+ setInput(event.target.value);
   }
   useEffect(() => {
     fetchTasks();
@@ -12,7 +12,7 @@ function App() {
   async function fetchTasks() {
     try {
       const response = await axios.get(
-        "https://192.168.6.57:3000/api/ToDo/GetTasks"
+        "http://192.168.6.57:3000/api/ToDo/GetTasks"
       );
       setTasks(response.data);
     } catch (error) {
@@ -25,7 +25,7 @@ function App() {
       try {
         // Send a POST request to add the task with the title from the input field
         const response = await axios.post(
-          "https://192.168.6.57:3000/api/ToDo/AddTask",
+          "http://192.168.6.57:3000/api/ToDo/AddTask",
           {
             title: input,
           }
@@ -44,9 +44,10 @@ function App() {
 
   async function handleDeleteTask(taskID) {
     try {
+      
       // Send a DELETE request to delete the task with the specified ID
       await axios.delete(
-        `https://192.168.6.57:3000/api/ToDo/DeleteTask/${taskID}`
+        `http://192.168.6.57:3000/api/ToDo/DeleteTask/${taskID}`
       );
       console.log("Task deleted successfully");
     } catch (error) {
@@ -54,19 +55,23 @@ function App() {
     }
   }
   async function handleMoveDown(taskID) {
-    try {
-      const response = await axios.put(
-        `https://192.168.6.57:3000/api/ToDo/MoveTaskDown/${taskID}`
-      );
-    } catch (error) {
-      console.log("ERORR");
-    }
+try {
+  const response = await axios.put(
+    `http://192.168.6.57:3000/api/ToDo/MoveTaskDown/${taskID}`
+  );
+
+}
+catch(error){
+  console.log("ERORR");
+}
   }
   async function handleMoveUp(taskID) {
     try {
-      await axios.put(
-        `https://192.168.6.57:3000/api/ToDo/MoveTaskUp/${taskID}`
-      );
+       await axios.put(
+         `http://192.168.6.57:3000/api/ToDo/MoveTaskUp/${taskID}`
+       );
+
+   
     } catch (error) {
       if (error.response) {
         // The request was made and the server responded with 500 status code
@@ -96,6 +101,7 @@ function App() {
       </div>
       <div className="ToDoCard">
         {tasks.map((task) => (
+          
           <li key={task._id}>
             <p>{task.title}</p>
             {<button onClick={() => handleDeleteTask(task._id)}>Delete</button>}
