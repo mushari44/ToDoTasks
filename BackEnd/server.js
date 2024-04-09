@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const https = require("https");
+const fs = require("fs");
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -46,9 +48,9 @@ app.delete("/api/ToDo/DeleteTask/:id", async (req, res) => {
       res.sendStatus(500); // Sending an error status code
     });
 });
-app.get("/",(req,res)=>{
-  res.send("HE:L")
-})
+app.get("/", (req, res) => {
+  res.send("HE:L");
+});
 app.put("/api/ToDo/MoveTaskUp/:id", async (req, res) => {
   const taskId = req.params.id;
 
@@ -99,6 +101,14 @@ app.put("/api/ToDo/MoveTaskDown/:id", async (req, res) => {
     res.sendStatus(500);
   }
 });
-app.listen(3000, "192.168.6.57", () => {
-  console.log("SERVER started");
+const serverOptions = {
+  key: fs.readFileSync("./private.key"),
+  cert: fs.readFileSync("./certificate.crt"),
+};
+
+https.createServer(serverOptions, app).listen(3000, "192.168.6.57", () => {
+  console.log("Server started on port 3000");
 });
+// app.listen(3000, "", () => {
+//   console.log("SERVER started");
+// });
