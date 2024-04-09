@@ -69,12 +69,6 @@ h1 {
   background: #1f2123;
 }
 
-.search img {
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
-}
-
 /* .search button {
   padding: 20px 40px;
   border-radius: 0.5rem;
@@ -116,47 +110,45 @@ h1 {
   flex-wrap: wrap;
 }
 .ToDoCard {
-     width: 80%;
+  width: 80%;
   margin-top: 3rem;
-
 }
 .ToDoCard li {
-  border-radius: 10px;
-  border: 8px solid;
+  border-radius: 1rem;
+  border: 0.5rem solid;
   color: black;
-  font-size: 22px;
+  font-size: 2rem;
   display: flex;
-text-align: center;
-  margin: 20px auto;
+  text-align: center;
+  margin: 1rem auto;
   justify-content: space-between; /* Ensure even spacing between elements */
   align-items: center; /* Align items vertically */
   justify-items: center;
   justify-content: center;
-  max-width: 95%; /*Adjust maximum width for better responsiveness*/
+  max-width: 100%; /*Adjust maximum width for better responsiveness*/
   /* padding: 5px; Add padding for spacing */
   background-color: #dfdfdf;
-}    
+  font-weight: bold ;
+}
 .ToDoCard li p {
   /* if you delete "flex: 1" the will push all the elements to the far left (try it) */
   flex: 1;
   color: #212121;
-  margin: 0 auto; /* Center the <p> element horizontally */
+  margin: 0rem auto; /* Center the <p> element horizontally */
+  
 }
-
 .ToDoCard button {
-  max-width: 80%;
+  max-width: 100%; /* Adjusted to fit any screen size */
   font-family: cursive;
   cursor: pointer;
-  padding: 15px 15px;
   background-color: #212121;
   border-color: black;
-  border-radius: 10px;
-  box-shadow: 1px 1px 1px 1px;
   color: #dfdfdf;
-  margin: 10px;
-  margin-right: 10px;
+  padding: 1rem 1.5rem; /* Adjusted for better padding */
+  border-radius: 0.625rem; /* Equivalent to 10px */
+  box-shadow: 0.0625rem 0.0625rem 0.0625rem 0.0625rem; /* Equivalent to 1px */
+  margin: 0.625rem; /* Equivalent to 10px */
 }
-
 
 @media screen and (max-width: 600px) {
   .app {
@@ -171,12 +163,23 @@ text-align: center;
   .search input {
     font-size: 1rem;
   }
-
-  .search img {
-    width: 20px;
-    height: 20px;
+  .ToDoCard button {
+    width: 10px;
+    padding: 0.1rem 0.1rem 0.1rem 0.1rem;
+     margin: 0.1rem 0.1rem 0.1rem 0.1rem;
+font-size: .6rem;
+    width: fit-content;
+    text-align: center;
   }
+  .ToDoCard li {
+     padding: .05rem;
+  }
+  .ToDoCard li p {
+  font-size: 0.7rem;
+  
+}    
 }
+
 
 @media screen and (max-width: 400px) {
   .app {
@@ -186,13 +189,16 @@ text-align: center;
   h1 {
     font-size: 2rem;
   }
-
+  button {
+    padding: 1rem 1.75rem;
+    background-color: red;
+  }
   .container {
     margin-top: 2rem;
   }
 
   .movie {
-    width: "100%";
+    width: 100%;
     margin: 1rem;
   }
 }

@@ -1,15 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const multer = require("multer");
-
 const app = express();
 app.use(cors());
-app.use(express.json()); // Middleware to parse JSON bodies (to use req.body)other wise it will give you undefined output
-
-mongoose.connect("mongodb://127.0.0.1:27017/ToDo").then(() => {
-  console.log("connected to the data base");
-});
+app.use(express.json());
+ // Middleware to parse JSON bodies (to use req.body)other wise it will give you undefined output
+mongoose
+  .connect("mongodb+srv://musharizh56:admin@cluster0.clvs4os.mongodb.net/ToDo")
+  .then(() => {
+    console.log("connected to the data base");
+  });
 let schema = new mongoose.Schema({ title: String });
 const Task = mongoose.model("Task", schema);
 // const firstTask = new Task({ title: "LETS GOOO" });
@@ -47,6 +47,56 @@ app.delete("/api/ToDo/DeleteTask/:id", async (req, res) => {
     });
 });
 
-app.listen(3000, () => {
+app.put("/api/ToDo/MoveTaskUp/:id", async (req, res) => {
+  const taskId = req.params.id;
+
+  try {
+    // Fetch the task to move up
+    const taskToMoveUp = await Task.findById(taskId);
+    // Find the task immediately preceding the task to move up based on ObjectId
+    const nextTask = await Task.findOne({
+      _id: { $lt: taskToMoveUp._id }
+    }).sort({_id:-1})
+
+    // Swap the positions of the current task and the previous task
+    const tempTitle = taskToMoveUp.title;
+    taskToMoveUp.title = nextTask.title;
+    nextTask.title = tempTitle;
+    // Save both tasks back to the database
+    // await Promise.all([taskToMoveUp.save(), nextTask.save()]);
+    await nextTask.save();
+    await taskToMoveUp.save();
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error moving task up:", error);
+    res.sendStatus(500);
+  }
+});
+app.put("/api/ToDo/MoveTaskDown/:id", async (req, res) => {
+  const taskId = req.params.id;
+
+  try {
+    // Fetch the task to move up
+    const taskToMoveDown = await Task.findById(taskId);
+    // Find the task immediately preceding the task to move up based on ObjectId
+    const prevTask = await Task.findOne({
+      _id: { $gt: taskToMoveDown._id },
+    }); // Sort by ObjectId in descending order
+
+    // Swap the positions of the current task and the previous task
+    const tempTitle = taskToMoveDown.title;
+    taskToMoveDown.title = prevTask.title;
+    prevTask.title = tempTitle;
+    // Save both tasks back to the database
+    // await Promise.all([taskToMoveDown.save(), prevTask.save()]);
+    await prevTask.save();
+    await taskToMoveDown.save();
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error moving task up:", error);
+    res.sendStatus(500);
+  }
+});
+app.listen(3000, "192.168.6.57", () => {
   console.log("SERVER started");
 });
