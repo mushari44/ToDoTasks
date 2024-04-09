@@ -12,7 +12,7 @@ function App() {
   async function fetchTasks() {
     try {
       const response = await axios.get(
-        "http://192.168.6.57:3000/api/ToDo/GetTasks"
+        "https://192.168.6.57:3000/api/ToDo/GetTasks"
       );
       setTasks(response.data);
     } catch (error) {
@@ -25,7 +25,7 @@ function App() {
       try {
         // Send a POST request to add the task with the title from the input field
         const response = await axios.post(
-          "http://192.168.6.57:3000/api/ToDo/AddTask",
+          "https://192.168.6.57:3000/api/ToDo/AddTask",
           {
             title: input,
           }
@@ -46,7 +46,7 @@ function App() {
     try {
       // Send a DELETE request to delete the task with the specified ID
       await axios.delete(
-        `http://192.168.6.57:3000/api/ToDo/DeleteTask/${taskID}`
+        `https://192.168.6.57:3000/api/ToDo/DeleteTask/${taskID}`
       );
       console.log("Task deleted successfully");
     } catch (error) {
@@ -55,8 +55,8 @@ function App() {
   }
   async function handleMoveDown(taskID) {
     try {
-      const response = await axios.put(
-        `http://192.168.6.57:3000/api/ToDo/MoveTaskDown/${taskID}`
+      await axios.put(
+        `https://192.168.6.57:3000/api/ToDo/MoveTaskDown/${taskID}`
       );
     } catch (error) {
       console.log("ERORR");
@@ -64,7 +64,9 @@ function App() {
   }
   async function handleMoveUp(taskID) {
     try {
-      await axios.put(`http://192.168.6.57:3000/api/ToDo/MoveTaskUp/${taskID}`);
+      await axios.put(
+        `https://192.168.6.57:3000/api/ToDo/MoveTaskUp/${taskID}`
+      );
     } catch (error) {
       if (error.response) {
         // The request was made and the server responded with 500 status code
