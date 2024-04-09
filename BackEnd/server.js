@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 app.use(express.json());
- // Middleware to parse JSON bodies (to use req.body)other wise it will give you undefined output
+// Middleware to parse JSON bodies (to use req.body)other wise it will give you undefined output
 mongoose
   .connect("mongodb+srv://musharizh56:admin@cluster0.clvs4os.mongodb.net/ToDo")
   .then(() => {
@@ -55,8 +55,8 @@ app.put("/api/ToDo/MoveTaskUp/:id", async (req, res) => {
     const taskToMoveUp = await Task.findById(taskId);
     // Find the task immediately preceding the task to move up based on ObjectId
     const nextTask = await Task.findOne({
-      _id: { $lt: taskToMoveUp._id }
-    }).sort({_id:-1})
+      _id: { $lt: taskToMoveUp._id },
+    }).sort({ _id: -1 });
 
     // Swap the positions of the current task and the previous task
     const tempTitle = taskToMoveUp.title;
