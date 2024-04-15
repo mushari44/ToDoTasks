@@ -13,7 +13,7 @@ function App() {
     try {
       
       const response = await axios.get(
-        "https://192.168.6.57:3000/api/ToDo/GetTasks"
+        "https://todotasks.onrender.com/ToDo/GetTasks"
       );
       setTasks(response.data);
     } catch (error) {
@@ -26,7 +26,7 @@ function App() {
       try {
         // Send a POST request to add the task with the title from the input field
         const response = await axios.post(
-          "https://192.168.6.57:3000/api/ToDo/AddTask",
+          "https://todotasks.onrender.com/ToDo/AddTask",
           {
             title: input,
           }
@@ -48,7 +48,7 @@ function App() {
     try {
       // Send a DELETE request to delete the task with the specified ID
       await axios.delete(
-        `https://192.168.6.57:3000/api/ToDo/DeleteTask/${taskID}`
+        `https://todotasks.onrender.com/ToDo/DeleteTask/${taskID}`
       );
       console.log("Task deleted successfully");
     } catch (error) {
@@ -58,7 +58,7 @@ function App() {
   async function handleMoveDown(taskID) {
     try {
       await axios.put(
-        `https://192.168.6.57:3000/api/ToDo/MoveTaskDown/${taskID}`
+        `https://todotasks.onrender.com/ToDo/MoveTaskDown/${taskID}`
       );
     } catch (error) {
       console.log("ERORR ");
@@ -67,7 +67,7 @@ function App() {
   async function handleMoveUp(taskID) {
     try {
       await axios.put(
-        `https://192.168.6.57:3000/api/ToDo/MoveTaskUp/${taskID}`
+        `https://todotasks.onrender.com/ToDo/MoveTaskUp/${taskID}`
       );
     } catch (error) {
       if (error.response) {
@@ -90,10 +90,6 @@ function App() {
         Movie Land
       </a>
       <h1>To Do Tasks</h1>
-      <a href="https://192.168.6.57:3000/" target="_blank">
-        Connect to the server
-      </a>
-
       <div className="search">
         <input
           placeholder="Add a new task"

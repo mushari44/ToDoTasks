@@ -55,7 +55,7 @@ app.delete("/ToDo/DeleteTask/:id", async (req, res) => {
     });
 });
 app.get("/", (req, res) => {
-  res.send("connected to the server");
+  res.send("connected to the ToDo server");
 });
 app.put("/ToDo/MoveTaskUp/:id", async (req, res) => {
   const taskId = req.params.id;
