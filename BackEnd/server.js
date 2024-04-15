@@ -1,12 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
-const http = require("http");
-const { Server } = require("socket.io");
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
 
 app.use(cors());
 app.use(express.json());
@@ -44,7 +39,6 @@ app.post("/ToDo/AddTask", async (req, res) => {
     const { title } = req.body;
     const newTask = new Task({ title });
     await newTask.save();
-    io.emit("taskAdded", newTask);
     console.log("Task added:", newTask);
     res.json(newTask);
   } catch (error) {
@@ -117,6 +111,6 @@ app.put("/ToDo/MoveTaskDown/:id", async (req, res) => {
 });
 const PORT = process.env.PORT || 4000;
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log("Server started on port", PORT);
 });

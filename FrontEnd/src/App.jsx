@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import io from "socket.io-client";
-const socket = io("https://todotasks.onrender.com");
+
 function App() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState("");
@@ -9,17 +8,8 @@ function App() {
   const [error, setError] = useState(null);
   useEffect(() => {
     fetchTasks();
-
-    // Listen for 'taskAdded' event from server
-    socket.on("taskAdded", (newTask) => {
-      setTasks([...tasks, newTask]);
-    });
-
-    // Clean up socket connection on unmount
-    return () => {
-      socket.disconnect();
-    };
   }, []);
+
   async function fetchTasks() {
     try {
       const response = await axios.get(
@@ -38,19 +28,18 @@ function App() {
   async function handleAddTask(event) {
     if (event.key === "Enter" && input.trim() !== "") {
       try {
-        const response = await axios.post(
+        await axios.post(
           "https://todotasks.onrender.com/ToDo/AddTask",
           {
             title: input.trim(),
           }
         );
+        fetchTasks();
         setInput("");
         setError(null);
       } catch (error) {
         console.error("Error adding task:", error);
         setError("Failed to add task. Please try again later.");
-      } finally {
-        fetchTasks();
       }
     }
   }
