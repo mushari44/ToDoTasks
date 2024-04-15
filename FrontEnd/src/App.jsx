@@ -8,9 +8,10 @@ function App() {
   }
   useEffect(() => {
     fetchTasks();
-  }, [tasks]);
+  }, []);
   async function fetchTasks() {
     try {
+      
       const response = await axios.get(
         "https://192.168.6.57:3000/api/ToDo/GetTasks"
       );
@@ -34,6 +35,7 @@ function App() {
         // Update the tasks state with the newly created task
         setTasks([...tasks, response.data]);
         console.log("TAsk Added ");
+      
         // Clear the input field
         setInput("");
       } catch (error) {
@@ -50,7 +52,7 @@ function App() {
       );
       console.log("Task deleted successfully");
     } catch (error) {
-      console.error("Error deleting task:", error);
+      console.error("Error deleting task: ", error);
     }
   }
   async function handleMoveDown(taskID) {
@@ -59,7 +61,7 @@ function App() {
         `https://192.168.6.57:3000/api/ToDo/MoveTaskDown/${taskID}`
       );
     } catch (error) {
-      console.log("ERORR");
+      console.log("ERORR ");
     }
   }
   async function handleMoveUp(taskID) {
@@ -84,7 +86,14 @@ function App() {
 
   return (
     <div className="app">
+        <a href="https://mushari44.github.io/ApiSearchMovie/" target="_blank">
+        Movie Land
+      </a>
       <h1>To Do Tasks</h1>
+      <a href="https://192.168.6.57:3000/" target="_blank">
+        Connect to the server
+      </a>
+
       <div className="search">
         <input
           placeholder="Add a new task"

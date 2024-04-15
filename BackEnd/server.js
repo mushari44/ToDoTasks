@@ -1,16 +1,22 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const https = require("https");
-const fs = require("fs");
 const app = express();
 app.use(cors());
 app.use(express.json());
 // Middleware to parse JSON bodies (to use req.body)other wise it will give you undefined output
+// mongoose
+//   .connect("mongodb+srv://musharizh56:admin@cluster0.clvs4os.mongodb.net/ToDo")
+//   .then(() => {
+//     console.log("connected to the data base");
+//   });
 mongoose
-  .connect("mongodb+srv://musharizh56:admin@cluster0.clvs4os.mongodb.net/ToDo")
+  .connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log("connected to the data base");
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
   });
 let schema = new mongoose.Schema({ title: String });
 const Task = mongoose.model("Task", schema);
@@ -18,12 +24,12 @@ const Task = mongoose.model("Task", schema);
 // firstTask.save().then(() => {
 //   console.log("First Task added");
 // });
-app.get("/api/ToDo/GetTasks", (req, res) => {
+app.get("/ToDo/GetTasks", (req, res) => {
   Task.find({}).then((tasks) => {
     res.send(tasks);
   });
 });
-app.post("/api/ToDo/AddTask", async (req, res) => {
+app.post("/ToDo/AddTask", async (req, res) => {
   try {
     const { title } = req.body;
     const newTask = new Task({ title });
@@ -37,7 +43,7 @@ app.post("/api/ToDo/AddTask", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-app.delete("/api/ToDo/DeleteTask/:id", async (req, res) => {
+app.delete("/ToDo/DeleteTask/:id", async (req, res) => {
   Task.findByIdAndDelete(req.params.id)
     .then(() => {
       console.log("Task Deleted");
@@ -49,9 +55,9 @@ app.delete("/api/ToDo/DeleteTask/:id", async (req, res) => {
     });
 });
 app.get("/", (req, res) => {
-  res.send("HE:L");
+  res.send("connected to the server");
 });
-app.put("/api/ToDo/MoveTaskUp/:id", async (req, res) => {
+app.put("/ToDo/MoveTaskUp/:id", async (req, res) => {
   const taskId = req.params.id;
 
   try {
@@ -76,7 +82,7 @@ app.put("/api/ToDo/MoveTaskUp/:id", async (req, res) => {
     res.sendStatus(500);
   }
 });
-app.put("/api/ToDo/MoveTaskDown/:id", async (req, res) => {
+app.put("/ToDo/MoveTaskDown/:id", async (req, res) => {
   const taskId = req.params.id;
 
   try {
@@ -101,14 +107,8 @@ app.put("/api/ToDo/MoveTaskDown/:id", async (req, res) => {
     res.sendStatus(500);
   }
 });
-const serverOptions = {
-  key: fs.readFileSync("./private.key"),
-  cert: fs.readFileSync("./certificate.crt"),
-};
+const PORT = process.env.PORT || 3000;
 
-https.createServer(serverOptions, app).listen(3000, "192.168.6.57", () => {
-  console.log("Server started on port 3000");
+app.listen(PORT, () => {
+  console.log("Server started on port", PORT);
 });
-// app.listen(3000, "", () => {
-//   console.log("SERVER started");
-// });
