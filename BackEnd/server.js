@@ -1,7 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+
+const http = require("http");
+const { Server } = require("socket.io");
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
 app.use(cors());
 app.use(express.json());
 // Middleware to parse JSON bodies (to use req.body)other wise it will give you undefined output
@@ -18,25 +24,28 @@ mongoose
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);
   });
-let schema = new mongoose.Schema({ title: String });
+const schema = new mongoose.Schema({ title: String });
 const Task = mongoose.model("Task", schema);
 // const firstTask = new Task({ title: "LETS GOOO" });
 // firstTask.save().then(() => {
 //   console.log("First Task added");
 // });
-app.get("/ToDo/GetTasks", (req, res) => {
-  Task.find({}).then((tasks) => {
-    res.send(tasks);
-  });
+app.get("/ToDo/GetTasks", async (req, res) => {
+  try {
+    const tasks = await Task.find({});
+    res.json(tasks);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 app.post("/ToDo/AddTask", async (req, res) => {
   try {
     const { title } = req.body;
     const newTask = new Task({ title });
-    await newTask.save().then(() => {
-      console.log("Task added " + newTask);
-    });
-
+    await newTask.save();
+    io.emit("taskAdded", newTask);
+    console.log("Task added:", newTask);
     res.json(newTask);
   } catch (error) {
     console.error("Error adding task:", error);
@@ -44,15 +53,14 @@ app.post("/ToDo/AddTask", async (req, res) => {
   }
 });
 app.delete("/ToDo/DeleteTask/:id", async (req, res) => {
-  Task.findByIdAndDelete(req.params.id)
-    .then(() => {
-      console.log("Task Deleted");
-      res.sendStatus(200); // Sending a success status code
-    })
-    .catch((error) => {
-      console.error("Error deleting task:", error);
-      res.sendStatus(500); // Sending an error status code
-    });
+  try {
+    await Task.findByIdAndDelete(req.params.id);
+    console.log("Task deleted:", req.params.id);
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 app.get("/", (req, res) => {
   res.send("connected to the ToDo server");
@@ -73,9 +81,9 @@ app.put("/ToDo/MoveTaskUp/:id", async (req, res) => {
     taskToMoveUp.title = nextTask.title;
     nextTask.title = tempTitle;
     // Save both tasks back to the database
-    // await Promise.all([taskToMoveUp.save(), nextTask.save()]);
-    await nextTask.save();
-    await taskToMoveUp.save();
+    await Promise.all([taskToMoveUp.save(), nextTask.save()]);
+    // await nextTask.save();
+    // await taskToMoveUp.save();
     res.sendStatus(200);
   } catch (error) {
     console.error("Error moving task up:", error);
@@ -98,9 +106,9 @@ app.put("/ToDo/MoveTaskDown/:id", async (req, res) => {
     taskToMoveDown.title = prevTask.title;
     prevTask.title = tempTitle;
     // Save both tasks back to the database
-    // await Promise.all([taskToMoveDown.save(), prevTask.save()]);
-    await prevTask.save();
-    await taskToMoveDown.save();
+    await Promise.all([taskToMoveDown.save(), prevTask.save()]);
+    // await prevTask.save();
+    // await taskToMoveDown.save();
     res.sendStatus(200);
   } catch (error) {
     console.error("Error moving task up:", error);
@@ -109,6 +117,6 @@ app.put("/ToDo/MoveTaskDown/:id", async (req, res) => {
 });
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("Server started on port", PORT);
 });

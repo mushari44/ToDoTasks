@@ -1,26 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import io from "socket.io-client";
-const socket = io("https://todotasks.onrender.com");
-function App() {
+
+export function App() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     fetchTasks();
-
-    // Listen for 'taskAdded' event from server
-    socket.on("taskAdded", (newTask) => {
-      setTasks([...tasks, newTask]);
-    });
-
-    // Clean up socket connection on unmount
-    return () => {
-      socket.disconnect();
-    };
   }, []);
+
   async function fetchTasks() {
+    setLoading(true);
     try {
       const response = await axios.get(
         "https://todotasks.onrender.com/ToDo/GetTasks"
@@ -44,13 +36,12 @@ function App() {
             title: input.trim(),
           }
         );
+        fetchTasks();
         setInput("");
         setError(null);
       } catch (error) {
         console.error("Error adding task:", error);
         setError("Failed to add task. Please try again later.");
-      } finally {
-        fetchTasks();
       }
     }
   }
@@ -95,15 +86,15 @@ function App() {
       await axios.put(
         `https://todotasks.onrender.com/ToDo/MoveTaskDown/${taskID}`
       );
-      // const index = tasks.findIndex((task) => task._id === taskID);
-      // if (index < tasks.length - 1) {
-      //   const updatedTasks = [...tasks];
-      //   [updatedTasks[index], updatedTasks[index + 1]] = [
-      //     updatedTasks[index + 1],
-      //     updatedTasks[index],
-      //   ];
-      //   setTasks(updatedTasks);
-      // }
+      const index = tasks.findIndex((task) => task._id === taskID);
+      if (index < tasks.length - 1) {
+        const updatedTasks = [...tasks];
+        [updatedTasks[index], updatedTasks[index + 1]] = [
+          updatedTasks[index + 1],
+          updatedTasks[index],
+        ];
+        // setTasks(updatedTasks);
+      }
       fetchTasks();
       setError(null);
     } catch (error) {
@@ -146,5 +137,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
