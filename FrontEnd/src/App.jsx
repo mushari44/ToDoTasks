@@ -4,42 +4,38 @@ import axios from "axios";
 function App() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [tasks]);
 
   async function fetchTasks() {
     try {
       const response = await axios.get(
         "https://todotasks.onrender.com/ToDo/GetTasks"
       );
+
       setTasks(response.data);
       setError(null);
     } catch (error) {
       console.error("Error fetching tasks:", error);
-      setError("Failed to fetch tasks. Please try again later.");
-    } finally {
-      setLoading(false);
+      // setError("Loading Tasks");
     }
+
   }
 
   async function handleAddTask(event) {
     if (event.key === "Enter" && input.trim() !== "") {
       try {
-        await axios.post(
-          "https://todotasks.onrender.com/ToDo/AddTask",
-          {
-            title: input.trim(),
-          }
-        );
-        fetchTasks();
+        await axios.post("https://todotasks.onrender.com/ToDo/AddTask", {
+          title: input.trim(),
+        });
+        // fetchTasks();
         setInput("");
         setError(null);
       } catch (error) {
         console.error("Error adding task:", error);
-        setError("Failed to add task. Please try again later.");
+        setError("Loading Tasks");
       }
     }
   }
@@ -49,11 +45,11 @@ function App() {
       await axios.delete(
         `https://todotasks.onrender.com/ToDo/DeleteTask/${taskID}`
       );
-      fetchTasks();
+      // fetchTasks();
       setError(null);
     } catch (error) {
       console.error("Error deleting task:", error);
-      setError("Failed to delete task. Please try again later.");
+      setError("Loading Tasks");
     }
   }
 
@@ -62,20 +58,11 @@ function App() {
       await axios.put(
         `https://todotasks.onrender.com/ToDo/MoveTaskUp/${taskID}`
       );
-      // const index = tasks.findIndex((task) => task._id === taskID);
-      // if (index > 0) {
-      //   const updatedTasks = [...tasks];
-      //   [updatedTasks[index], updatedTasks[index - 1]] = [
-      //     updatedTasks[index - 1],
-      //     updatedTasks[index],
-      //   ];
-      //   setTasks(updatedTasks);
-      // }
-      fetchTasks();
+      // fetchTasks();
       setError(null);
     } catch (error) {
       console.error("Error moving task up:", error);
-      setError("Failed to move task up. Please try again later.");
+      setError("Loading Tasks");
     }
   }
 
@@ -84,20 +71,11 @@ function App() {
       await axios.put(
         `https://todotasks.onrender.com/ToDo/MoveTaskDown/${taskID}`
       );
-      // const index = tasks.findIndex((task) => task._id === taskID);
-      // if (index < tasks.length - 1) {
-      //   const updatedTasks = [...tasks];
-      //   [updatedTasks[index], updatedTasks[index + 1]] = [
-      //     updatedTasks[index + 1],
-      //     updatedTasks[index],
-      //   ];
-      //   setTasks(updatedTasks);
-      // }
-      fetchTasks();
+      // fetchTasks();
       setError(null);
     } catch (error) {
       console.error("Error moving task down:", error);
-      setError("Failed to move task down. Please try again later.");
+      setError("Loading Tasks");
     }
   }
 
@@ -116,10 +94,8 @@ function App() {
           onKeyDown={handleAddTask}
         />
       </div>
-      {loading ? (
-        <p className="loading">Loading tasks...</p>
-      ) : error ? (
-        <p>Error: {error}</p>
+      {error ? (
+        <p className="loading">Error: {error}</p>
       ) : (
         <ul className="ToDoCard">
           {tasks.map((task) => (
