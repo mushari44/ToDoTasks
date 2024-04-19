@@ -12,7 +12,10 @@ app.use(express.json());
 //     console.log("connected to the data base");
 //   });
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(
+    process.env.MONGODB_URI ||
+      "mongodb+srv://musharizh56:admin@cluster0.clvs4os.mongodb.net/StudentsInfo"
+  )
   .then(() => {
     console.log("Connected to MongoDB");
   })
