@@ -7,7 +7,7 @@ function App() {
   const [error, setError] = useState(null);
   useEffect(() => {
     fetchTasks();
-  }, [f]);
+  }, [handleAddTask, handleDeleteTask, handleMoveDown, handleMoveUp]);
 
   async function fetchTasks() {
     try {
@@ -21,7 +21,6 @@ function App() {
       console.error("Error fetching tasks:", error);
       // setError("Loading Tasks");
     }
-
   }
 
   async function handleAddTask(event) {
