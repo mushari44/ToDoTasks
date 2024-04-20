@@ -7,7 +7,7 @@ function App() {
   const [error, setError] = useState(null);
   useEffect(() => {
     fetchTasks();
-  }, [tasks]);
+  }, [f]);
 
   async function fetchTasks() {
     try {
