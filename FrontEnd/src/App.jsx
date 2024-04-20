@@ -12,7 +12,7 @@ function App() {
   async function fetchTasks() {
     try {
       const response = await axios.get(
-        "https://todotasks.onrender.com/ToDo/GetTasks"
+        "https://to-do-tasks-server.vercel.app/ToDo/GetTasks"
       );
 
       setTasks(response.data);
@@ -27,7 +27,7 @@ function App() {
   async function handleAddTask(event) {
     if (event.key === "Enter" && input.trim() !== "") {
       try {
-        await axios.post("https://todotasks.onrender.com/ToDo/AddTask", {
+        await axios.post("https://to-do-tasks-server.vercel.app/ToDo/AddTask", {
           title: input.trim(),
         });
         // fetchTasks();
@@ -43,7 +43,7 @@ function App() {
   async function handleDeleteTask(taskID) {
     try {
       await axios.delete(
-        `https://todotasks.onrender.com/ToDo/DeleteTask/${taskID}`
+        `https://to-do-tasks-server.vercel.app/ToDo/DeleteTask/${taskID}`
       );
       // fetchTasks();
       setError(null);
@@ -56,7 +56,7 @@ function App() {
   async function handleMoveUp(taskID) {
     try {
       await axios.put(
-        `https://todotasks.onrender.com/ToDo/MoveTaskUp/${taskID}`
+        `https://to-do-tasks-server.vercel.app/ToDo/MoveTaskUp/${taskID}`
       );
       // fetchTasks();
       setError(null);
@@ -69,7 +69,7 @@ function App() {
   async function handleMoveDown(taskID) {
     try {
       await axios.put(
-        `https://todotasks.onrender.com/ToDo/MoveTaskDown/${taskID}`
+        `https://to-do-tasks-server.vercel.app/ToDo/MoveTaskDown/${taskID}`
       );
       // fetchTasks();
       setError(null);
