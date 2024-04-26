@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import LightDarkMode from "./light-dark-mode";
 function App() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState("");
   const [error, setError] = useState(null);
   useEffect(() => {
     fetchTasks();
-  }, [handleAddTask, handleDeleteTask, handleMoveDown, handleMoveUp]);
+  }, []);
 
   async function fetchTasks() {
     try {
@@ -35,6 +35,8 @@ function App() {
       } catch (error) {
         console.error("Error adding task:", error);
         setError("Loading Tasks");
+      } finally {
+        fetchTasks();
       }
     }
   }
@@ -49,6 +51,8 @@ function App() {
     } catch (error) {
       console.error("Error deleting task:", error);
       setError("Loading Tasks");
+    } finally {
+      fetchTasks();
     }
   }
 
@@ -62,6 +66,8 @@ function App() {
     } catch (error) {
       console.error("Error moving task up:", error);
       setError("Loading Tasks");
+    } finally {
+      fetchTasks();
     }
   }
 
@@ -75,11 +81,14 @@ function App() {
     } catch (error) {
       console.error("Error moving task down:", error);
       setError("Loading Tasks");
+    } finally {
+      fetchTasks();
     }
   }
-
   return (
     <div className="app">
+      <LightDarkMode></LightDarkMode>
+
       <a href="https://mushari44.github.io/ApiSearchMovie/" target="_blank">
         Movie Land
       </a>

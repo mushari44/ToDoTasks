@@ -5,8 +5,9 @@
   margin: 0;
   border: 0;
   box-sizing: border-box;
+  transition: all 0.8s;
 }
-
+/*  */
 :root {
   --font-roboto: "Roboto Slab", serif;
   --font-raleway: "Raleway", sans-serif;
@@ -14,7 +15,6 @@
 
 body {
   font-family: var(--font-roboto);
-  background-color: #212426;
 }
 
 .app {
@@ -25,11 +25,7 @@ body {
   align-items: center;
   flex-direction: column;
 }
-.app a {
-  display: flex;
-  justify-items: end;
-  justify-content: end;
-}
+
 .app h2 {
   display: flex;
   display: inline-block;
@@ -37,11 +33,7 @@ body {
 h1 {
   font-size: 3rem;
   letter-spacing: 0.9px;
-  background: linear-gradient(
-    180deg,
-    rgba(249, 211, 180, 1) 0%,
-    rgba(249, 211, 180, 0) 100%
-  );
+  background: var(--title-text-color);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -51,14 +43,13 @@ h1 {
 .search {
   width: 71%;
   margin: 4rem 0 2rem;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 1.5rem 1.75rem;
   border-radius: 3rem;
-  background: #1f2123;
+  border: 1px solid var(--text-primary);
+  background: var(--background);
   -webkit-box-shadow: 5px 5px 7px #1c1d1f, -5px -5px 7px #222527;
   box-shadow: 5px 5px 7px #1c1d1f, -5px -5px 7px #222527;
 }
@@ -71,41 +62,9 @@ h1 {
   font-family: var(--font-raleway);
   font-weight: 500;
   padding-right: 1rem;
-
   outline: none;
-  color: #a1a1a1;
-  background: #1f2123;
-}
-
-/* .search button {
-  padding: 20px 40px;
-  border-radius: 0.5rem;
-  margin-left: 15px;
-  color: #a1a1a1;
-  font-family: var(--font-raleway);
-  font-weight: 900;
-  letter-spacing: 0.75px;
-  font-size: 1.25rem;
-  cursor: pointer;
-
-  background: #1f2123;
-  -webkit-box-shadow: 5px 5px 7px #1c1d1f, -5px -5px 7px #222527;
-  box-shadow: 5px 5px 7px #1c1d1f, -5px -5px 7px #222527;
-} */
-
-.empty {
-  width: 100%;
-  margin-top: 3rem;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.empty h2 {
-  font-size: 1.25rem;
-  color: #f9d3b4;
-  font-family: var(--font-raleway);
+  color: var(--text-primary);
+  background: var(--background);
 }
 
 .container {
@@ -159,18 +118,49 @@ h1 {
 .loading {
   font-size: 2rem;
   letter-spacing: 0.2rem;
-  background: linear-gradient(
-    180deg,
-    rgba(249, 211, 180, 1) 0%,
-    rgba(249, 211, 180, 0) 100%
-  );
+  background: var(--title-text-color);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   width: fit-content;
   margin: 1.5rem;
 }
+.light-dark-mode {
+  display: flex;
+  position: absolute; /* Makes it move to the absolute position relative to the nearest positioned ancestor */
+  top: 1rem; /* Adjusts the distance from the top of the viewport */
+  left: 1rem; /* Adjusts the distance from the left of the viewport */
+  align-items: center; /* Centers elements vertically within the container */
+}
+.theme-mode:hover {
+  cursor: pointer;
+  opacity: 0.4;
+}
+
+.theme-mode {
+  width: 50%;
+  height: auto;
+}
 @media screen and (max-width: 600px) {
+  * {
+    transition: all 0.4s;
+  }
+  /* Styles for the search input */
+  .light-dark-mode {
+    top: 1rem; /* Adjusts the distance from the top of the viewport */
+    left: 0.4rem; /* Adjusts the distance from the left of the viewport */
+    font-size: 0.7rem;
+  }
+  .theme-mode {
+    bottom: 1rem;
+    width: 40%;
+    display: flex;
+    position: absolute; /* Makes it move to the absolute position relative to the nearest positioned ancestor */
+    height: auto;
+  }
+  h1 {
+    font-size: 2rem;
+  }
   .loading {
     font-weight: bold;
     font-size: 1rem;
@@ -191,7 +181,7 @@ h1 {
     font-size: 1rem;
   }
   .ToDoCard button {
-    padding: 0.1rem 0.25rem ;
+    padding: 0.1rem 0.25rem;
     margin: 0.1rem 0.1rem 0.1rem 0.1rem;
     font-size: 0.6rem;
     width: fit-content;
@@ -203,6 +193,45 @@ h1 {
   .ToDoCard li p {
     font-size: 0.7rem;
   }
+}
+[data-theme="dark"] {
+  --background: #212426;
+  --text-primary: white;
+  --button-bg: #272b30;
+  --button-text: white;
+  --input-bg: #151618;
+  --nth-child-bg: #343a40;
+  --title-text-color: linear-gradient(
+    180deg,
+    rgb(255, 255, 255) 10%,
+    rgb(103, 157, 195) 100%
+  );
+}
+[data-theme="light"] {
+  --background: rgb(227, 227, 227);
+  --text-primary: black;
+  --button-bg: #272b30;
+  --button-text: white;
+  --input-bg: white;
+  --nth-child-bg: silver;
+  --title-text-color: linear-gradient(
+    180deg,
+    rgb(0, 0, 0) 0%,
+    rgb(135, 147, 214) 100%
+  );
+}
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+}
+button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+}
+
+input {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
 }
 
 /* @media screen and (max-width: 400px) {
