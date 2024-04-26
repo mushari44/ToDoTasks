@@ -131,6 +131,8 @@ h1 {
   top: 1rem; /* Adjusts the distance from the top of the viewport */
   left: 1rem; /* Adjusts the distance from the left of the viewport */
   align-items: center; /* Centers elements vertically within the container */
+  user-select: none;
+  font-size: 1rem;
 }
 .theme-mode:hover {
   cursor: pointer;
@@ -138,8 +140,16 @@ h1 {
 }
 
 .theme-mode {
-  width: 50%;
   height: auto;
+  width: 50%;
+}
+.theme-mode-on {
+  height: auto;
+  width: 50%;
+}
+.theme-mode-off {
+  height: auto;
+  width: 50%;
 }
 @media screen and (max-width: 600px) {
   * {
@@ -147,12 +157,31 @@ h1 {
   }
   /* Styles for the search input */
   .light-dark-mode {
-    top: 1rem; /* Adjusts the distance from the top of the viewport */
+    top: 3rem; /* Adjusts the distance from the top of the viewport */
     left: 0.4rem; /* Adjusts the distance from the left of the viewport */
     font-size: 0.7rem;
+    display: flex;
+    position: absolute; /* Makes it move to the absolute position relative to the nearest positioned ancestor */
+    height: auto;
   }
   .theme-mode {
     bottom: 1rem;
+    width: 40%;
+    display: flex;
+    position: absolute; /* Makes it move to the absolute position relative to the nearest positioned ancestor */
+    height: auto;
+  }
+  .theme-mode-on {
+    bottom: 1rem;
+    left: 3rem;
+    width: 40%;
+    display: flex;
+    position: absolute; /* Makes it move to the absolute position relative to the nearest positioned ancestor */
+    height: auto;
+  }
+  .theme-mode-off {
+    bottom: 1rem;
+    left: 3rem;
     width: 40%;
     display: flex;
     position: absolute; /* Makes it move to the absolute position relative to the nearest positioned ancestor */
